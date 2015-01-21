@@ -147,12 +147,12 @@ at runtime, but that should be no problem since it's included in the
 Ruby standard library.
 
 To modify the parsers you have to modify the `.y` files and regenerate
-the Ruby files afterwards. There are two rake tasks to help with that.
+the Ruby files afterwards. There are a few rake tasks to help with that.
 
-* `rake parser::status`
-* `rake parser::object`
-* `rake parser::config`
-* `rake parser::resource`
+* `rake parser:status`
+* `rake parser:object`
+* `rake parser:config`
+* `rake parser:resource`
 
 The bundler gem is used to handle the development dependencies.
 Run `bundle install` to install them.
