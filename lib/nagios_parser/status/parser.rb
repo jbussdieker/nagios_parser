@@ -27,7 +27,7 @@ def create_token(string)
       # ignore comments
     when (!inside and match = scanner.scan(/\w+/))
       result << [:TYPE, match]
-    when match = scanner.scan(/\{/)
+    when (!inside and match = scanner.scan(/\{/))
       inside = true
       result << [:OPEN, nil]
     when match = scanner.scan(/\}/)
@@ -37,6 +37,8 @@ def create_token(string)
       result << [:KEY, match.chop.gsub(/\s+$/, '')]
     when (inside and match = scanner.scan(/\d+$/))
       result << [:VALUE, match.to_i]
+    when (inside and match = scanner.scan(/.*\{.+\}.*/))
+      result << [:VALUE, match.gsub(/\s+$/, '')]
     when (inside and match = scanner.scan(/[^\n\}]+/))
       result << [:VALUE, match.gsub(/\s+$/, '')]
     else
@@ -67,27 +69,27 @@ end
 ##### State transition tables begin ###
 
 racc_action_table = [
-     5,     8,     1,    13,     8,     4,    10,    11,     1 ]
+     4,     7,     3,    11,    10,     6,    10,     3,    13 ]
 
 racc_action_check = [
-     2,     4,     2,     9,     9,     1,     5,     8,     0 ]
+     1,     4,     1,     8,     8,     3,     6,     0,    10 ]
 
 racc_action_pointer = [
-     6,     2,     0,   nil,    -4,     6,   nil,   nil,     1,    -1,
-   nil,   nil,   nil,   nil ]
+     5,     0,   nil,     2,     1,   nil,     1,   nil,    -1,   nil,
+     2,   nil,   nil,   nil ]
 
 racc_action_default = [
-    -8,    -8,    -8,    -1,    -8,    -8,    -2,    -4,    -6,    -8,
-    14,    -7,    -5,    -3 ]
+    -8,    -8,    -1,    -8,    -8,    -2,    -8,    14,    -8,    -4,
+    -6,    -3,    -5,    -7 ]
 
 racc_goto_table = [
-     7,     3,     9,     6,     2,    12 ]
+     9,     8,    12,     2,     5,     1 ]
 
 racc_goto_check = [
-     4,     2,     3,     2,     1,     4 ]
+     4,     3,     4,     2,     2,     1 ]
 
 racc_goto_pointer = [
-   nil,     4,     1,    -2,    -4 ]
+   nil,     5,     3,    -5,    -6 ]
 
 racc_goto_default = [
    nil,   nil,   nil,   nil,   nil ]

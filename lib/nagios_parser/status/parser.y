@@ -46,7 +46,7 @@ def create_token(string)
       # ignore comments
     when (!inside and match = scanner.scan(/\w+/))
       result << [:TYPE, match]
-    when match = scanner.scan(/\{/)
+    when (!inside and match = scanner.scan(/\{/))
       inside = true
       result << [:OPEN, nil]
     when match = scanner.scan(/\}/)
@@ -56,6 +56,8 @@ def create_token(string)
       result << [:KEY, match.chop.gsub(/\s+$/, '')]
     when (inside and match = scanner.scan(/\d+$/))
       result << [:VALUE, match.to_i]
+    when (inside and match = scanner.scan(/.*\{.+\}.*/))
+      result << [:VALUE, match.gsub(/\s+$/, '')]
     when (inside and match = scanner.scan(/[^\n\}]+/))
       result << [:VALUE, match.gsub(/\s+$/, '')]
     else

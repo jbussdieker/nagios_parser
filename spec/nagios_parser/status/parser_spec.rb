@@ -96,6 +96,18 @@ describe NagiosParser::Status::Parser do
       end
     end
 
+    context "with a valid string containing squiggly braces" do
+      it "returns a hash of status types" do
+        string = <<-RUBY
+          servicestatus {
+            check_command=check_http_api!api.example.com!80!'{"status":true}'
+          }
+        RUBY
+
+        data = parser.parse(string)
+      end
+    end
+
     context "with invalid status data" do
       it "will raise an exception" do
         expect {
